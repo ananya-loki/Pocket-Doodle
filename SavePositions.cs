@@ -1,7 +1,7 @@
-// using System.Collections;
-// using System.Collections.Generic;
-// using UnityEngine;
-// using System.IO;
+//using System.Collections;
+//using System.Collections.Generic;
+//using UnityEngine;
+//using System.IO;
 
 // public class SavePositions : MonoBehaviour
 // {
@@ -48,65 +48,132 @@
 
 // }
 
-    using System.Collections;
-    using System.Collections.Generic;
-    using UnityEngine;
-    using System.IO;
+//    using System.Collections;
+//    using System.Collections.Generic;
+//    using UnityEngine;
+//    using System.IO;
+//
+//    [System.Serializable]
+//    public class PositionData
+//    {
+//        public string name;
+//        public float[] position;
+//    }
+//
+//    public class SavePositions : MonoBehaviour
+//    {
+//        public Transform[] squares; // Array to hold the square objects
+//        public string fileName = "positions.json"; // Name of the JSON file to save the positions
+//
+//        public void Save()
+//        {
+//            List<PositionData> positions = new List<PositionData>();
+//
+//            // Fetch all active GameObjects in the scene
+//            Transform[] allObjects = GameObject.FindObjectsOfType(typeof(Transform)) as Transform[];
+//
+//            foreach (Transform obj in allObjects)
+//            {
+//                // Log the name of the GameObject
+//                Debug.Log("Found object: " + obj.name);
+//
+//                // Check if the object name contains "(Clone)"
+//                if (obj.name.Contains("(Clone)"))
+//                {
+//                    Debug.Log("dfsf");
+//                    PositionData positionData = new PositionData();
+//                    positionData.name = obj.name;
+//                    positionData.position = new float[] { obj.position.x, obj.position.y, obj.position.z };
+//                    positions.Add(positionData);
+//                }
+//            }
+//
+//            // Wrap positions list into a wrapper object
+//            var wrapper = new
+//            {
+//                Positions = positions
+//            };
+//
+//            string json = JsonUtility.ToJson(wrapper);
+//            Debug.Log(json);
+//            File.WriteAllText(Application.dataPath + "/" + fileName, json);
+//
+//            if (positions.Count > 0)
+//            {
+//                Debug.Log("Positions saved successfully to " + Application.dataPath + "/" + fileName);
+//            }
+//            else
+//            {
+//                Debug.Log("No positions saved. No GameObjects with '(Clone)' in their name found.");
+//            }
+//        }
+//
+//    }
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+using System.IO;
 
-    [System.Serializable]
-    public class PositionData
+[System.Serializable]
+public class PositionData
+{
+    public string name;
+    public float[] position;
+}
+
+public class SavePositions : MonoBehaviour
+{
+    public Transform[] squares; // Array to hold the square objects
+    public string fileName = "positions.json"; // Name of the JSON file to save the positions
+
+    public void Save()
     {
-        public string name;
-        public float[] position;
-    }
+        List<PositionData> positions = new List<PositionData>();
 
-    public class SavePositions : MonoBehaviour
-    {
-        public Transform[] squares; // Array to hold the square objects
-        public string fileName = "positions.json"; // Name of the JSON file to save the positions
+        // Fetch all active GameObjects in the scene
+        Transform[] allObjects = GameObject.FindObjectsOfType(typeof(Transform)) as Transform[];
 
-        public void Save()
+        foreach (Transform obj in allObjects)
         {
-            List<PositionData> positions = new List<PositionData>();
+            // Log the name of the GameObject
+            Debug.Log("Found object: " + obj.name);
 
-            // Fetch all active GameObjects in the scene
-            Transform[] allObjects = GameObject.FindObjectsOfType(typeof(Transform)) as Transform[];
-
-            foreach (Transform obj in allObjects)
+            // Check if the object name contains "(Clone)"
+            if (obj.name.Contains("(Clone)"))
             {
-                // Log the name of the GameObject
-                Debug.Log("Found object: " + obj.name);
-
-                // Check if the object name contains "(Clone)"
-                if (obj.name.Contains("(Clone)"))
-                {
-                    Debug.Log("dfsf");
-                    PositionData positionData = new PositionData();
-                    positionData.name = obj.name;
-                    positionData.position = new float[] { obj.position.x, obj.position.y, obj.position.z };
-                    positions.Add(positionData);
-                }
-            }
-
-            // Wrap positions list into a wrapper object
-            var wrapper = new
-            {
-                Positions = positions
-            };
-
-            string json = JsonUtility.ToJson(wrapper);
-            Debug.Log(json);
-            File.WriteAllText(Application.dataPath + "/" + fileName, json);
-
-            if (positions.Count > 0)
-            {
-                Debug.Log("Positions saved successfully to " + Application.dataPath + "/" + fileName);
-            }
-            else
-            {
-                Debug.Log("No positions saved. No GameObjects with '(Clone)' in their name found.");
+                Debug.Log("dfsf");
+                PositionData positionData = new PositionData();
+                positionData.name = obj.name;
+                positionData.position = new float[] { obj.position.x, obj.position.y, obj.position.z };
+                positions.Add(positionData);
             }
         }
 
-    }
+        using (StreamWriter file = new StreamWriter(Application.dataPath + "/" + fileName))
+        {
+            file.Write("[\n");
 
+            for (int i = 0; i < positions.Count; i++)
+            {
+                file.Write("  {\n");
+                file.Write($"    \"name\": \"{positions[i].name}\",\n");
+                file.Write($"    \"position\": [{positions[i].position[0]}, {positions[i].position[1]}, {positions[i].position[2]}]\n");
+                if (i < positions.Count - 1)
+                    file.Write("  },\n");
+                else
+                    file.Write("  }\n");
+            }
+
+            file.Write("]\n");
+        }
+
+        if (positions.Count > 0)
+        {
+            Debug.Log("Positions saved successfully to " + Application.dataPath + "/" + fileName);
+        }
+        else
+        {
+            Debug.Log("No positions saved. No GameObjects with '(Clone)' in their name found.");
+        }
+    }
+}
