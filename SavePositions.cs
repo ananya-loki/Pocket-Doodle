@@ -215,16 +215,22 @@ public class SavePositions : MonoBehaviour
                 positionData.name = obj.name;
                 positionData.position = new float[] { obj.position.x, obj.position.y, obj.position.z };
                 Renderer renderer = obj.GetComponent<Renderer>();
-                if (renderer != null) 
-                {
-                    Color color = renderer.material.color; // Get the color of the material
-                    positionData.color = new float[] { color.r, color.g, color.b, color.a }; // RGBA
-                }
-                else
-                {
-                    
-                    positionData.color = new float[] { 1, 1, 1, 1 }; 
-                }
+                SpriteRenderer spriteRenderer = obj.GetComponent<SpriteRenderer>();
+                Color color;
+                if (renderer != null) // Check if the GameObject has a Renderer component
+                    {
+                        color = renderer.material.color; // Get the color of the material
+                    }
+                    else if (spriteRenderer != null) // Check if the GameObject has a SpriteRenderer component
+                    {
+                        color = spriteRenderer.color; // Get the color of the sprite
+                    }
+                    else
+                    {
+                        // Default color (white) in case the GameObject has no Renderer or SpriteRenderer component
+                        color = Color.white;
+                    }
+                     positionData.color = new float[] { color.r, color.g, color.b, color.a };
                 positions.Add(positionData);
             }
         }
