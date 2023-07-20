@@ -194,11 +194,12 @@ public class SavePositions : MonoBehaviour
 {
     public Transform[] squares; // Array to hold the square objects
     public TMP_InputField inputField;
-    public string fileName = inputField.text + ".json"; // Name of the JSON file to save the positions
+    
 
     public void Save()
     {
         List<PositionData> positions = new List<PositionData>();
+        public string fileName = inputField.text + ".json"; // Name of the JSON file to save the positions
 
         // Fetch all active GameObjects in the scene
         Transform[] allObjects = GameObject.FindObjectsOfType(typeof(Transform)) as Transform[];
