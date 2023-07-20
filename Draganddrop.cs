@@ -23,6 +23,7 @@ public class Draganddrop : MonoBehaviour
         {
             spriteRenderer.color = newColor;
             Colorselect.colorval = 0;
+            transform.position = new Vector3(transform.position.x, transform.position.y, 0);
         }
         
     }
