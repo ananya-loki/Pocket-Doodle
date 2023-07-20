@@ -51,6 +51,7 @@ public class Draganddrop : MonoBehaviour
             spriteRenderer.color = yellow;
             Colorselect.colorval = 0;
         }
+        transform.position = new Vector3(transform.position.x, transform.position.y, 0);
 
     }
     void OnMouseDrag()
@@ -58,6 +59,7 @@ public class Draganddrop : MonoBehaviour
         Vector3 curScreenPoint = new Vector3(Input.mousePosition.x, Input.mousePosition.y, screenPoint.z);
         Vector3 curPosition = Camera.main.ScreenToWorldPoint(curScreenPoint) + offset;
         transform.position = curPosition;
+        transform.position = new Vector3(transform.position.x, transform.position.y, 0);
     }
 
 }
