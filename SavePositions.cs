@@ -181,7 +181,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using System.IO;
-
+using TMPro;
 [System.Serializable]
 public class PositionData
 {
@@ -193,7 +193,8 @@ public class PositionData
 public class SavePositions : MonoBehaviour
 {
     public Transform[] squares; // Array to hold the square objects
-    public string fileName = "positions.json"; // Name of the JSON file to save the positions
+    public TMP_InputField inputField;
+    public string fileName = inputField.text + ".json"; // Name of the JSON file to save the positions
 
     public void Save()
     {
